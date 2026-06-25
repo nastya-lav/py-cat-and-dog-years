@@ -36,6 +36,7 @@ def test_should_convert_age_correctly(
 ) -> None:
     assert get_human_age(cat_age, dog_age) == expected_array
 
+
 @pytest.mark.parametrize(
     "cat_age, dog_age, expected_exception",
     [
