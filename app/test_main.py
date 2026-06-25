@@ -1,4 +1,5 @@
 import pytest
+from typing import Any
 
 from app.main import get_human_age
 
@@ -19,8 +20,12 @@ from app.main import get_human_age
             id="test should add second human year for next 9 animal's years past 15th"  # noqa: E501
         ),
         pytest.param(
-            100, 100, [21, 17],
+            28, 28, [3, 2],
             id="test should convert age for each animal accordingly"
+        ),
+        pytest.param(
+            10_000, 10_000, [2496, 1997],
+            id="test should convert large age numbers"
         )
     ]
 )
@@ -31,7 +36,17 @@ def test_should_convert_age_correctly(
 ) -> None:
     assert get_human_age(cat_age, dog_age) == expected_array
 
-
-def test_should_raise_exception_if_age_is_negative() -> None:
-    with pytest.raises(ValueError):
-        get_human_age(-1, -1)
+@pytest.mark.parametrize(
+    "cat_age, dog_age, expected_exception",
+    [
+        pytest.param(-1, -1, ValueError),
+        pytest.param(None, "", TypeError),
+    ]
+)
+def test_should_raise_exception_if_arguments_are_invalid(
+        cat_age: Any,
+        dog_age: Any,
+        expected_exception: type[Exception]
+) -> None:
+    with pytest.raises(expected_exception):
+        get_human_age(cat_age, dog_age)
